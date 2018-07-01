@@ -1,4 +1,26 @@
-[qin_cluster]
-172.16.34.11
-[webservers]
-172.16.34.11 
+[production]
+
+[staging]
+
+[vagrant]
+vagrant1 ansible_ssh_host=172.16.34.11 ansible_ssh_port=22
+vagrant2 ansible_ssh_host=172.16.34.12 ansible_ssh_port=22
+vagrant3 ansible_ssh_host=172.16.34.13 ansible_ssh_port=22
+
+[lb]
+
+[web]
+vagrant1
+
+[task]
+vagrant2
+
+[rabbitmq]
+vagrant3
+
+[db]
+vagrant3
+
+[django:children]
+web
+task
