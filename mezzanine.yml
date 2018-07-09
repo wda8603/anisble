@@ -31,22 +31,22 @@
   vars_files:
     - secrets.yml
   tasks:
-    - name:install apt packages
+    - name: install apt packages
       yum: pkg={{ item }} update_cache=yes
       sudo: Ture 
       with_items:
-        - git
-        - libjpeg-dev
-        - libpq-dev
-        - memcached
-        - nginx 
-        - postgresql
-        - python-dev
-        - python-pip
-        - python-psycopg2
-        - python-setuptools
-        - python-virtualenv
-        - supervisor
+        - "{{ git }}"
+        - "{{ libjpeg-dev }}"
+        - "{{ libpq-dev }}"
+        - "{{ memcached }}"
+        - "{{ nginx }}" 
+        - "{{ postgresql }}"
+        - "{{ python-dev }}"
+        - "{{ python-pip }}"
+        - "{{ python-psycopg2 }}"
+        - "{{ python-setuptools }}"
+        - "{{ python-virtualenv }}"
+        - "{{ supervisor }}"
 
     - name: check out the repository on the host
       git: repo={{ repo_url }} dest={{ proj_path }} accept_hostkey=yes
@@ -113,12 +113,12 @@
 
     - name: set the gunicorn config file
       template:
-        src:templates/gunicorn.conf.py.j2
+        src:templates/gunicorn.conf.j2
         dest:"{{ proj_path}}/gunicorn.conf.py"
 
     - name: set supervisor config file 
       template:
-        src:template/supervisor.conf.py.j2
+        src:templates/supervisor.conf.j2
         dest:/etc/supervisor/conf.d/mezzanine.conf
 
     - name: set the nginx config file
@@ -160,7 +160,7 @@
       cron: name="poll twitter" minute"*/5" user={{ user }}
         job="{{ manage }} poll_twitter"
 
-  handers:
+  handlers:
     - name: restart supervisor 
       supervisorctl: name=gunicorn_mezzanine state=restarted
       sudo: True
