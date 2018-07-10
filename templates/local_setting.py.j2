@@ -1,0 +1,37 @@
+from __future__ import unicode_literals
+
+SECRET_KEY = "{{ secret_key }}"
+NEVERCACHE_KEY = "{{ nevercache_key }}"
+ALLOWED_HOSTS = [{% for domain in domains %}"{{ domain }}",{% endfor %}]
+
+DATABASES = {
+     "default": {
+         # 该配置的值需要以"postgresql_psycopy2"、"mysql"、"sqlite3" 或者 "oracle" 结尾
+         "ENGINE": "django.db.backends.postgresql_psycopg2",
+         # 数据库的名字。但如果使用sqllite3,则为数据库的路径
+         "NAME": "{{ proj_name }}",
+         # 使用sqlite3时，不使用这个配置
+         "USER": "{{ proj_name }}",
+         # 使用sqlite3时，不使用这个配置
+         "PASSWORD": "{{ db_pass }}",
+         # 对于本机，可以设置为空字符串。使用sqlite3时,不使用这个配置
+         "HOST": "127.0.0.1",
+         # 该配置的值默认为空字符串。使用sqlite3时，不使用这个配置
+         "PORT": "",
+     }
+}
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTOCOL", "https")
+
+CACHE_MIDDLEWARE_SECONDS = 60
+
+CACHE_MIDDLEWARE_KEY_PREFIX = "{{ proj_name }}"
+
+CACHES = {
+
+    "defaults": {
+        "BACKED": "django.core.cache.backends.memcached.MemcachedCache",
+        "LOCATION": "127.0.0.1:11211"
+    }
+}
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
