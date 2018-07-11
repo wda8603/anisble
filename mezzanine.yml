@@ -31,6 +31,9 @@
   vars_files:
     - secrets.yml
   tasks:
+    - name: set fact
+      set_fact: 
+           ansible_python_interpreter: "/usr/bin/python2.6"
     - name: install yum packages
       yum: pkg={{ item }} update_cache=yes
       become: True
@@ -42,11 +45,14 @@
         - nginx
         - postgresql
         - python-devel
-        - python-pip
+#        - python-pip
         - python-psycopg2
         - python-setuptools
         - python-virtualenv
         - supervisor
+    - name: set factback
+      set_fact: 
+           ansible_python_interpreter: "/usr/bin/python"
     - name: create project path
       file: path={{ proj_path }} state=directory
     - name: create a logs directory
@@ -62,15 +68,15 @@
         - virtualenv
         - virtualenvwrapper
       become: True
-    - name: create project locale
-      locale_gen: name={{ locale }}
-      become: True
+#    - name: create project locale
+#      locale.gen: name={{ locale }}
+#      become: True
     - name: create a DB user
       postgresql_user:
         name: "{{ database_user }}"
         password: "{{ db_pass }}"
       become: True
-      become_user: postgres
+#      become_user: postgres
     - name: create the database
       postgresql_db:
         name: "{{ database_name }}"

@@ -1,0 +1,37 @@
+---
+
+- name: install Python-setuptools
+  hosts: web
+  become: True
+  tasks:
+    - name: set fact
+      set_fact: 
+           ansible_python_interpreter: "/usr/bin/python2.6"
+    - name: install yum pkg
+      yum: pkg={{ item }} update_cache=yes
+      with_items: 
+        - gcc
+        - glibc 
+        - zlib-devel
+        - openssl-devel
+    - name: set factback
+      set_fact: 
+           ansible_python_interpreter: "/usr/bin/python"   
+    - name: mkdir tools
+      file:
+        path: /home/vagrant/tools
+        state: directory
+    - name: copy setuptool.pkg
+      copy: src=/home/vagrant/tools/setuptools-39.2.0.zip dest=/home/vagrant/tools/setuptools-39.2.0.zip
+    - name: tar python.tgz
+      raw: cd /home/vagrant/tools/;unzip setuptools-39.2.0.zip
+    - name: install Python27
+      raw: cd /home/vagrant/tools/setuptools-39.2.0;/usr/bin/python setup.py install
+    - name: copy setuptool.pkg
+      copy: src=/home/vagrant/tools/distribute-0.6.10.tar.gz dest=/home/vagrant/tools/distribute-0.6.10.tar.gz
+    - name: unzip distribute.zip
+      raw: cd /home/vagrant/tools/;tar -zxvf distribute-0.6.10.tar.gz
+    - name: install distribute
+      raw: cd /home/vagrant/tools/distribute-0.6.10;python setup.py install
+
+

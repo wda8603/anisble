@@ -1,0 +1,36 @@
+---
+
+- name: install Python2.7
+  hosts: web
+  become: True
+  tasks:
+    - name: set fact
+      set_fact: 
+           ansible_python_interpreter: "/usr/bin/python2.6"
+    - name: install yum pkg
+      yum: pkg={{ item }} update_cache=yes
+      with_items: 
+        - gcc
+        - glibc 
+        - zlib-devel
+        - openssl-devel
+    - name: set factback
+      set_fact: 
+           ansible_python_interpreter: "/usr/bin/python"   
+    - name: mkdir tools
+      file:
+        path: /home/vagrant/tools
+        state: directory
+    - name: copy pkg
+      copy: src=/home/vagrant/tools/Python-2.7.8.tgz dest=/home/vagrant/tools/Python-2.7.8.tgz
+    - name: tar python.tgz
+      raw: cd /home/vagrant/tools/;tar -zxvf Python-2.7.8.tgz
+    - name: install Python27
+      raw: cd /home/vagrant/tools/Python-2.7.8;./configure --prefix=/usr/local; make;make install
+    - name: copy headfile
+      raw: cd /usr/local/include/python2.7/;cp -a ./* /usr/local/include/
+    - name: backup python26
+      raw: cd /usr/bin/;mv python pythonbak;ln -s /usr/local/bin/python /usr/bin/python
+    - name: yum env 
+      raw: sed -i 's/\#\!\/usr\/bin\/python/\#\!\/usr\/bin\/python2.6/g' /usr/bin/yum
+    

@@ -3,7 +3,7 @@
 [staging]
 
 [vagrant]
-vagrant1 ansible_ssh_host=172.16.34.11 ansible_ssh_port=22
+vagrant1 ansible_ssh_host=172.16.34.11 ansible_ssh_port=22 
 vagrant2 ansible_ssh_host=172.16.34.12 ansible_ssh_port=22
 vagrant3 ansible_ssh_host=172.16.34.13 ansible_ssh_port=22
 
